@@ -63,14 +63,14 @@ $stmt->close();
                         <div class="carousel-inner">
                             <?php foreach ($images as $index => $image): ?>
                                 <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                                    <img src="<?php echo htmlspecialchars($image); ?>" 
-                                         class="d-block w-100 main-product-image" 
-                                         onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
-                                         alt="<?php echo htmlspecialchars($product['Product_Name']); ?>">
+                                    <img src="<?php echo htmlspecialchars($image); ?>"
+                                        class="d-block w-100 main-product-image"
+                                        onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
+                                        alt="<?php echo htmlspecialchars($product['Product_Name']); ?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        
+
                         <?php if (count($images) > 1): ?>
                             <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -90,13 +90,13 @@ $stmt->close();
                         <div class="row g-2">
                             <?php foreach ($images as $index => $image): ?>
                                 <div class="col">
-                                    <img src="<?php echo htmlspecialchars($image); ?>" 
-                                         class="img-thumbnail thumbnail-image <?php echo $index === 0 ? 'active' : ''; ?>" 
-                                         alt="Thumbnail <?php echo $index + 1; ?>"
-                                         onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
-                                         data-bs-target="#productCarousel" 
-                                         data-bs-slide-to="<?php echo $index; ?>"
-                                         style="cursor: pointer; height: 80px; object-fit: cover;">
+                                    <img src="<?php echo htmlspecialchars($image); ?>"
+                                        class="img-thumbnail thumbnail-image <?php echo $index === 0 ? 'active' : ''; ?>"
+                                        alt="Thumbnail <?php echo $index + 1; ?>"
+                                        onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
+                                        data-bs-target="#productCarousel"
+                                        data-bs-slide-to="<?php echo $index; ?>"
+                                        style="cursor: pointer; height: 80px; object-fit: cover;">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -109,7 +109,7 @@ $stmt->close();
         <div class="col-md-6">
             <div class="product-details">
                 <h1 class="mb-3"><?php echo htmlspecialchars($product['Product_Name']); ?></h1>
-                
+
                 <?php if (!empty($product['Tag'])): ?>
                     <div class="mb-3">
                         <span class="badge bg-primary fs-6"><?php echo htmlspecialchars($product['Tag']); ?></span>
@@ -198,9 +198,9 @@ $stmt->close();
                     <?php if (!empty($product['Tags'])): ?>
                         <div class="mb-3">
                             <h6><i class="bi bi-tags"></i> Tags</h6>
-                            <?php 
+                            <?php
                             $tags = explode(',', $product['Tags']);
-                            foreach ($tags as $tag): 
+                            foreach ($tags as $tag):
                             ?>
                                 <span class="badge bg-secondary me-1"><?php echo htmlspecialchars(trim($tag)); ?></span>
                             <?php endforeach; ?>
@@ -218,7 +218,7 @@ $stmt->close();
     </div>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include 'includes/footer.php'; 
+include 'includes/footer.php';
 ?>

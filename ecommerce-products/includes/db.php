@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Database Connection File
  * 
@@ -26,7 +27,8 @@ $conn->set_charset("utf8mb4");
 /**
  * Helper function to sanitize input
  */
-function sanitize_input($data) {
+function sanitize_input($data)
+{
     global $conn;
     $data = trim($data);
     $data = stripslashes($data);
@@ -37,7 +39,8 @@ function sanitize_input($data) {
 /**
  * Helper function to generate slug from text
  */
-function generate_slug($text) {
+function generate_slug($text)
+{
     $text = strtolower($text);
     $text = preg_replace('/[^a-z0-9\s-]/', '', $text);
     $text = preg_replace('/[\s-]+/', '-', $text);
@@ -48,22 +51,24 @@ function generate_slug($text) {
 /**
  * Helper function to check if user is logged in
  */
-function is_logged_in() {
+function is_logged_in()
+{
     return isset($_SESSION['user_id']);
 }
 
 /**
  * Helper function to check if user is admin
  */
-function is_admin() {
+function is_admin()
+{
     return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
 
 /**
  * Helper function to redirect
  */
-function redirect($url) {
+function redirect($url)
+{
     header("Location: $url");
     exit();
 }
-?>

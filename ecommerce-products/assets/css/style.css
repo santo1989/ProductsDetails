@@ -220,11 +220,11 @@ a:hover {
     .main-product-image {
         height: 300px;
     }
-    
+
     .display-4 {
         font-size: 2rem;
     }
-    
+
     .display-5 {
         font-size: 1.75rem;
     }
@@ -240,6 +240,7 @@ a:hover {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -252,7 +253,7 @@ a:hover {
     padding: 0;
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     content: "›";
     font-size: 1.2rem;
 }
@@ -305,13 +306,14 @@ a:hover {
 
 /* Print Styles */
 @media print {
+
     .navbar,
     footer,
     .btn,
     .breadcrumb {
         display: none !important;
     }
-    
+
     .container {
         max-width: 100%;
     }

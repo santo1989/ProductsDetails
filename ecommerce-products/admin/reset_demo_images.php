@@ -88,4 +88,3 @@ try {
 
 $conn->close();
 redirect('dashboard.php');
-?>

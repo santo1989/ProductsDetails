@@ -5,20 +5,22 @@ if (session_status() === PHP_SESSION_NONE) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? $page_title . ' - ' : ''; ?>Tosrifa Industries Ltd</title>
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo isset($base_url) ? $base_url : ''; ?>assets/css/style.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -71,8 +73,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="container mt-3">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?php 
-                echo htmlspecialchars($_SESSION['success_message']); 
+                <?php
+                echo htmlspecialchars($_SESSION['success_message']);
                 unset($_SESSION['success_message']);
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -83,8 +85,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <?php if (isset($_SESSION['error_message'])): ?>
         <div class="container mt-3">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?php 
-                echo htmlspecialchars($_SESSION['error_message']); 
+                <?php
+                echo htmlspecialchars($_SESSION['error_message']);
                 unset($_SESSION['error_message']);
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

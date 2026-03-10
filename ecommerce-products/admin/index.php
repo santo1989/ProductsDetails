@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
-            
+
             // Verify password
             if (password_verify($password, $user['Password'])) {
                 // Set session variables
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['Username'];
                 $_SESSION['role'] = $user['Role'];
                 $_SESSION['success_message'] = 'Welcome back, ' . $user['Username'] . '!';
-                
+
                 $stmt->close();
                 $conn->close();
                 redirect('dashboard.php');
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error = 'Invalid username or password.';
         }
-        
+
         $stmt->close();
     }
 }
@@ -62,7 +62,7 @@ $page_title = 'Login';
                     <h2 class="text-center mb-4">
                         <i class="bi bi-box-arrow-in-right"></i> Login
                     </h2>
-                    
+
                     <?php if (!empty($error)): ?>
                         <div class="alert alert-danger">
                             <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
@@ -74,9 +74,9 @@ $page_title = 'Login';
                             <label for="username" class="form-label">Username</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="username" name="username" 
-                                       value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" 
-                                       required autofocus>
+                                <input type="text" class="form-control" id="username" name="username"
+                                    value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>"
+                                    required autofocus>
                             </div>
                         </div>
 
@@ -112,7 +112,7 @@ $page_title = 'Login';
     </div>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include '../includes/footer.php'; 
+include '../includes/footer.php';
 ?>

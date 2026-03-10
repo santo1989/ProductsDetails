@@ -86,29 +86,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($image_fields as $field) {
             if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES[$field];
-                
+
                 // Validate file type
                 if (!in_array($file['type'], $allowed_types)) {
                     $error = "Invalid file type for $field. Only JPG and PNG are allowed.";
                     break;
                 }
-                
+
                 // Validate file size
                 if ($file['size'] > $max_file_size) {
                     $error = "File size for $field exceeds 5MB limit.";
                     break;
                 }
-                
+
                 // Delete old image if exists
                 if (!empty($image_paths[$field]) && file_exists('../' . $image_paths[$field])) {
                     unlink('../' . $image_paths[$field]);
                 }
-                
+
                 // Generate unique filename
                 $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
                 $filename = uniqid($field . '_') . '.' . $extension;
                 $filepath = $upload_dir . $filename;
-                
+
                 // Move uploaded file
                 if (move_uploaded_file($file['tmp_name'], $filepath)) {
                     $image_paths[$field] = 'uploads/' . $filename;
@@ -127,14 +127,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     Color = ?, Buyer = ?, Style = ?, Tags = ?, Tag = ?, Price = ?,
                                     Main_Image = ?, Image1 = ?, Image2 = ?, Image3 = ?, Image4 = ?
                                     WHERE ID = ?");
-            
-            $stmt->bind_param("sssssssssssssdsssssi", 
-                $product_name, $category, $size, $description, $fabrication,
-                $construction, $gsm, $finishes, $color, $buyer, $style, $tags, $tag, $price,
-                $image_paths['main_image'], $image_paths['image1'], $image_paths['image2'], 
-                $image_paths['image3'], $image_paths['image4'], $product_id
+
+            $stmt->bind_param(
+                "sssssssssssssdsssssi",
+                $product_name,
+                $category,
+                $size,
+                $description,
+                $fabrication,
+                $construction,
+                $gsm,
+                $finishes,
+                $color,
+                $buyer,
+                $style,
+                $tags,
+                $tag,
+                $price,
+                $image_paths['main_image'],
+                $image_paths['image1'],
+                $image_paths['image2'],
+                $image_paths['image3'],
+                $image_paths['image4'],
+                $product_id
             );
-            
+
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = 'Product updated successfully!';
                 $stmt->close();
@@ -143,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'Failed to update product. Please try again.';
             }
-            
+
             $stmt->close();
         }
     }
@@ -184,38 +201,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="col-md-6 mb-3">
                         <label for="product_name" class="form-label">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="product_name" name="product_name" 
-                               value="<?php echo htmlspecialchars($product['Product_Name']); ?>" required>
+                        <input type="text" class="form-control" id="product_name" name="product_name"
+                            value="<?php echo htmlspecialchars($product['Product_Name']); ?>" required>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="category" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="category" name="category" 
-                               value="<?php echo htmlspecialchars($product['Category']); ?>">
+                        <input type="text" class="form-control" id="category" name="category"
+                            value="<?php echo htmlspecialchars($product['Category']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="size" class="form-label">Size</label>
-                        <input type="text" class="form-control" id="size" name="size" 
-                               value="<?php echo htmlspecialchars($product['Size']); ?>">
+                        <input type="text" class="form-control" id="size" name="size"
+                            value="<?php echo htmlspecialchars($product['Size']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="color" class="form-label">Color</label>
-                        <input type="text" class="form-control" id="color" name="color" 
-                               value="<?php echo htmlspecialchars($product['Color']); ?>">
+                        <input type="text" class="form-control" id="color" name="color"
+                            value="<?php echo htmlspecialchars($product['Color']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="price" class="form-label">Price ($)</label>
-                        <input type="number" step="0.01" class="form-control" id="price" name="price" 
-                               value="<?php echo $product['Price']; ?>">
+                        <input type="number" step="0.01" class="form-control" id="price" name="price"
+                            value="<?php echo $product['Price']; ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="tag" class="form-label">Tag</label>
-                        <input type="text" class="form-control" id="tag" name="tag" 
-                               value="<?php echo htmlspecialchars($product['Tag']); ?>">
+                        <input type="text" class="form-control" id="tag" name="tag"
+                            value="<?php echo htmlspecialchars($product['Tag']); ?>">
                     </div>
 
                     <div class="col-md-12 mb-3">
@@ -230,44 +247,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="col-md-6 mb-3">
                         <label for="fabrication" class="form-label">Fabrication</label>
-                        <input type="text" class="form-control" id="fabrication" name="fabrication" 
-                               value="<?php echo htmlspecialchars($product['Fabrication']); ?>">
+                        <input type="text" class="form-control" id="fabrication" name="fabrication"
+                            value="<?php echo htmlspecialchars($product['Fabrication']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="construction" class="form-label">Construction</label>
-                        <input type="text" class="form-control" id="construction" name="construction" 
-                               value="<?php echo htmlspecialchars($product['Construction']); ?>">
+                        <input type="text" class="form-control" id="construction" name="construction"
+                            value="<?php echo htmlspecialchars($product['Construction']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="gsm" class="form-label">GSM</label>
-                        <input type="text" class="form-control" id="gsm" name="gsm" 
-                               value="<?php echo htmlspecialchars($product['GSM']); ?>">
+                        <input type="text" class="form-control" id="gsm" name="gsm"
+                            value="<?php echo htmlspecialchars($product['GSM']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="finishes" class="form-label">Finishes</label>
-                        <input type="text" class="form-control" id="finishes" name="finishes" 
-                               value="<?php echo htmlspecialchars($product['Finishes']); ?>">
+                        <input type="text" class="form-control" id="finishes" name="finishes"
+                            value="<?php echo htmlspecialchars($product['Finishes']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="buyer" class="form-label">Buyer</label>
-                        <input type="text" class="form-control" id="buyer" name="buyer" 
-                               value="<?php echo htmlspecialchars($product['Buyer']); ?>">
+                        <input type="text" class="form-control" id="buyer" name="buyer"
+                            value="<?php echo htmlspecialchars($product['Buyer']); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="style" class="form-label">Style</label>
-                        <input type="text" class="form-control" id="style" name="style" 
-                               value="<?php echo htmlspecialchars($product['Style']); ?>">
+                        <input type="text" class="form-control" id="style" name="style"
+                            value="<?php echo htmlspecialchars($product['Style']); ?>">
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="tags" class="form-label">Tags (comma-separated)</label>
-                        <input type="text" class="form-control" id="tags" name="tags" 
-                               value="<?php echo htmlspecialchars($product['Tags']); ?>">
+                        <input type="text" class="form-control" id="tags" name="tags"
+                            value="<?php echo htmlspecialchars($product['Tags']); ?>">
                     </div>
 
                     <!-- Product Images -->
@@ -280,8 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="main_image" class="form-label">Main Image</label>
                         <?php if (!empty($product['Main_Image'])): ?>
                             <div class="mb-2">
-                                <img src="<?php echo htmlspecialchars($product['Main_Image']); ?>" 
-                                      alt="Current Main Image" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                <img src="<?php echo htmlspecialchars($product['Main_Image']); ?>"
+                                    alt="Current Main Image" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control" id="main_image" name="main_image" accept="image/jpeg,image/jpg,image/png">
@@ -291,8 +308,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="image1" class="form-label">Additional Image 1</label>
                         <?php if (!empty($product['Image1'])): ?>
                             <div class="mb-2">
-                                <img src="<?php echo htmlspecialchars($product['Image1']); ?>" 
-                                      alt="Current Image 1" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                <img src="<?php echo htmlspecialchars($product['Image1']); ?>"
+                                    alt="Current Image 1" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control" id="image1" name="image1" accept="image/jpeg,image/jpg,image/png">
@@ -302,8 +319,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="image2" class="form-label">Additional Image 2</label>
                         <?php if (!empty($product['Image2'])): ?>
                             <div class="mb-2">
-                                <img src="<?php echo htmlspecialchars($product['Image2']); ?>" 
-                                      alt="Current Image 2" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                <img src="<?php echo htmlspecialchars($product['Image2']); ?>"
+                                    alt="Current Image 2" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control" id="image2" name="image2" accept="image/jpeg,image/jpg,image/png">
@@ -313,8 +330,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="image3" class="form-label">Additional Image 3</label>
                         <?php if (!empty($product['Image3'])): ?>
                             <div class="mb-2">
-                                <img src="<?php echo htmlspecialchars($product['Image3']); ?>" 
-                                      alt="Current Image 3" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                <img src="<?php echo htmlspecialchars($product['Image3']); ?>"
+                                    alt="Current Image 3" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control" id="image3" name="image3" accept="image/jpeg,image/jpg,image/png">
@@ -324,8 +341,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="image4" class="form-label">Additional Image 4</label>
                         <?php if (!empty($product['Image4'])): ?>
                             <div class="mb-2">
-                                <img src="<?php echo htmlspecialchars($product['Image4']); ?>" 
-                                      alt="Current Image 4" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                <img src="<?php echo htmlspecialchars($product['Image4']); ?>"
+                                    alt="Current Image 4" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control" id="image4" name="image4" accept="image/jpeg,image/jpg,image/png">
@@ -347,7 +364,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include '../includes/footer.php'; 
+include '../includes/footer.php';
 ?>

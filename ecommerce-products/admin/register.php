@@ -37,21 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         } else {
             $stmt->close();
-            
+
             // Hash password and insert new user
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $role = 'user'; // Default role
-            
+
             $stmt = $conn->prepare("INSERT INTO users (Username, Password, Role) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $username, $hashed_password, $role);
-            
+
             if ($stmt->execute()) {
                 $success = 'Registration successful! You can now login.';
                 $username = ''; // Clear form
             } else {
                 $error = 'Registration failed. Please try again.';
             }
-            
+
             $stmt->close();
         }
     }
@@ -70,7 +70,7 @@ $page_title = 'Register';
                     <h2 class="text-center mb-4">
                         <i class="bi bi-person-plus"></i> Register
                     </h2>
-                    
+
                     <?php if (!empty($error)): ?>
                         <div class="alert alert-danger">
                             <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
@@ -88,9 +88,9 @@ $page_title = 'Register';
                             <label for="username" class="form-label">Username</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="username" name="username" 
-                                       value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" 
-                                       required autofocus>
+                                <input type="text" class="form-control" id="username" name="username"
+                                    value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>"
+                                    required autofocus>
                             </div>
                             <div class="form-text">At least 3 characters</div>
                         </div>
@@ -130,7 +130,7 @@ $page_title = 'Register';
     </div>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include '../includes/footer.php'; 
+include '../includes/footer.php';
 ?>

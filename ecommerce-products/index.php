@@ -26,15 +26,15 @@ $result = $conn->query($sql);
             <?php while ($product = $result->fetch_assoc()): ?>
                 <div class="col">
                     <div class="card h-100 shadow-sm product-card">
-                        <?php 
+                        <?php
                         $main_image = !empty($product['Main_Image']) ? $product['Main_Image'] : 'assets/images/placeholder.svg';
                         ?>
-                        <img src="<?php echo htmlspecialchars($main_image); ?>" 
-                             class="card-img-top" 
-                             alt="<?php echo htmlspecialchars($product['Product_Name']); ?>"
-                                onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
-                             style="height: 250px; object-fit: cover;">
-                        
+                        <img src="<?php echo htmlspecialchars($main_image); ?>"
+                            class="card-img-top"
+                            alt="<?php echo htmlspecialchars($product['Product_Name']); ?>"
+                            onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
+                            style="height: 250px; object-fit: cover;">
+
                         <?php if (!empty($product['Tag'])): ?>
                             <div class="position-absolute top-0 end-0 m-2">
                                 <span class="badge bg-primary"><?php echo htmlspecialchars($product['Tag']); ?></span>
@@ -43,7 +43,7 @@ $result = $conn->query($sql);
 
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($product['Product_Name']); ?></h5>
-                            
+
                             <p class="card-text">
                                 <?php if (!empty($product['Category'])): ?>
                                     <span class="badge bg-secondary"><?php echo htmlspecialchars($product['Category']); ?></span>
@@ -52,21 +52,21 @@ $result = $conn->query($sql);
                                     <span class="badge bg-info text-dark"><?php echo htmlspecialchars($product['Color']); ?></span>
                                 <?php endif; ?>
                             </p>
-                            
+
                             <p class="card-text text-truncate" style="max-height: 48px;">
                                 <?php echo htmlspecialchars(substr($product['Description'], 0, 100)); ?>...
                             </p>
-                            
+
                             <?php if ($product['Price'] > 0): ?>
                                 <p class="card-text">
                                     <strong class="text-primary fs-5">$<?php echo number_format($product['Price'], 2); ?></strong>
                                 </p>
                             <?php endif; ?>
                         </div>
-                        
+
                         <div class="card-footer bg-transparent">
-                            <a href="details.php?slug=<?php echo urlencode($product['Product_URL']); ?>" 
-                               class="btn btn-primary w-100">
+                            <a href="details.php?slug=<?php echo urlencode($product['Product_URL']); ?>"
+                                class="btn btn-primary w-100">
                                 <i class="bi bi-eye"></i> View Details
                             </a>
                         </div>
@@ -81,7 +81,7 @@ $result = $conn->query($sql);
     <?php endif; ?>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include 'includes/footer.php'; 
+include 'includes/footer.php';
 ?>

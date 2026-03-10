@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("s", $product_url);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if ($result->num_rows > 0) {
             $product_url .= '-' . time(); // Make it unique
         }
@@ -61,24 +61,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($image_fields as $field) {
             if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES[$field];
-                
+
                 // Validate file type
                 if (!in_array($file['type'], $allowed_types)) {
                     $error = "Invalid file type for $field. Only JPG and PNG are allowed.";
                     break;
                 }
-                
+
                 // Validate file size
                 if ($file['size'] > $max_file_size) {
                     $error = "File size for $field exceeds 5MB limit.";
                     break;
                 }
-                
+
                 // Generate unique filename
                 $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
                 $filename = uniqid($field . '_') . '.' . $extension;
                 $filepath = $upload_dir . $filename;
-                
+
                 // Move uploaded file
                 if (move_uploaded_file($file['tmp_name'], $filepath)) {
                     $image_paths[$field] = 'uploads/' . $filename;
@@ -97,14 +97,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     Construction, GSM, Finishes, Color, Buyer, Style, Tags, Tag, Price, 
                                     Main_Image, Image1, Image2, Image3, Image4, Product_URL, Created_By) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            
-            $stmt->bind_param("sssssssssssssdssssssi", 
-                $product_name, $category, $size, $description, $fabrication,
-                $construction, $gsm, $finishes, $color, $buyer, $style, $tags, $tag, $price,
-                $image_paths['main_image'], $image_paths['image1'], $image_paths['image2'], 
-                $image_paths['image3'], $image_paths['image4'], $product_url, $created_by
+
+            $stmt->bind_param(
+                "sssssssssssssdssssssi",
+                $product_name,
+                $category,
+                $size,
+                $description,
+                $fabrication,
+                $construction,
+                $gsm,
+                $finishes,
+                $color,
+                $buyer,
+                $style,
+                $tags,
+                $tag,
+                $price,
+                $image_paths['main_image'],
+                $image_paths['image1'],
+                $image_paths['image2'],
+                $image_paths['image3'],
+                $image_paths['image4'],
+                $product_url,
+                $created_by
             );
-            
+
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = 'Product created successfully!';
                 $stmt->close();
@@ -113,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'Failed to create product. Please try again.';
             }
-            
+
             $stmt->close();
         }
     }
@@ -274,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<?php 
+<?php
 $conn->close();
-include '../includes/footer.php'; 
+include '../includes/footer.php';
 ?>

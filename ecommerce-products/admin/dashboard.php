@@ -89,13 +89,13 @@ if (is_admin()) {
                                 <tr>
                                     <td><?php echo $product['ID']; ?></td>
                                     <td>
-                                        <?php 
+                                        <?php
                                         $thumb = !empty($product['Main_Image']) ? $product['Main_Image'] : '../assets/images/placeholder.svg';
                                         ?>
-                                        <img src="<?php echo htmlspecialchars($thumb); ?>" 
-                                             alt="<?php echo htmlspecialchars($product['Product_Name']); ?>"
+                                        <img src="<?php echo htmlspecialchars($thumb); ?>"
+                                            alt="<?php echo htmlspecialchars($product['Product_Name']); ?>"
                                             onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';"
-                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                            style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
                                     <td>
                                         <strong><?php echo htmlspecialchars($product['Product_Name']); ?></strong>
@@ -117,22 +117,22 @@ if (is_admin()) {
                                     <td><?php echo date('M d, Y', strtotime($product['Created_At'])); ?></td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="../details.php?slug=<?php echo urlencode($product['Product_URL']); ?>" 
-                                               class="btn btn-sm btn-info" 
-                                               title="View" 
-                                               target="_blank">
+                                            <a href="../details.php?slug=<?php echo urlencode($product['Product_URL']); ?>"
+                                                class="btn btn-sm btn-info"
+                                                title="View"
+                                                target="_blank">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="edit_product.php?id=<?php echo $product['ID']; ?>" 
-                                               class="btn btn-sm btn-warning" 
-                                               title="Edit">
+                                            <a href="edit_product.php?id=<?php echo $product['ID']; ?>"
+                                                class="btn btn-sm btn-warning"
+                                                title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <?php if (is_admin()): ?>
-                                                <a href="delete_product.php?id=<?php echo $product['ID']; ?>" 
-                                                   class="btn btn-sm btn-danger" 
-                                                   title="Delete"
-                                                   onclick="return confirm('Are you sure you want to delete this product?');">
+                                                <a href="delete_product.php?id=<?php echo $product['ID']; ?>"
+                                                    class="btn btn-sm btn-danger"
+                                                    title="Delete"
+                                                    onclick="return confirm('Are you sure you want to delete this product?');">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             <?php endif; ?>
@@ -145,7 +145,7 @@ if (is_admin()) {
                 </div>
             <?php else: ?>
                 <div class="alert alert-info text-center">
-                    <i class="bi bi-info-circle"></i> No products found. 
+                    <i class="bi bi-info-circle"></i> No products found.
                     <a href="create_product.php">Create your first product</a>.
                 </div>
             <?php endif; ?>
@@ -153,8 +153,8 @@ if (is_admin()) {
     </div>
 </div>
 
-<?php 
+<?php
 if (isset($stmt)) $stmt->close();
 $conn->close();
-include '../includes/footer.php'; 
+include '../includes/footer.php';
 ?>
