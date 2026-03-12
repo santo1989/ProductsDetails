@@ -195,7 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Auto-refresh page if product information changes
-  const autoRefreshNode = document.querySelector('[data-product-autorefresh="1"]')
+  const autoRefreshNode = document.querySelector(
+    '[data-product-autorefresh="1"]',
+  )
   if (autoRefreshNode) {
     const refreshInterval =
       parseInt(autoRefreshNode.dataset.interval || '20', 10) * 1000
