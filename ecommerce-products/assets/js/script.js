@@ -194,6 +194,60 @@ document.addEventListener('DOMContentLoaded', function () {
     lazyImages.forEach((img) => imageObserver.observe(img))
   }
 
+  // Auto-refresh page if product information changes
+  const autoRefreshNode = document.querySelector('[data-product-autorefresh="1"]')
+  if (autoRefreshNode) {
+    const refreshInterval =
+      parseInt(autoRefreshNode.dataset.interval || '20', 10) * 1000
+    const scope = autoRefreshNode.dataset.scope || 'all'
+    const endpoint = `${window.APP_BASE_URL || ''}api/product_updates.php?scope=${encodeURIComponent(scope)}`
+
+    let baseline = `${autoRefreshNode.dataset.lastUpdate || '0'}:${autoRefreshNode.dataset.total || '0'}`
+    let isChecking = false
+
+    const checkForProductUpdates = () => {
+      if (isChecking) {
+        return
+      }
+
+      isChecking = true
+
+      fetch(endpoint, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Update check failed')
+          }
+          return response.json()
+        })
+        .then((data) => {
+          if (!data || !data.ok) {
+            return
+          }
+
+          const latest = `${data.last_update || 0}:${data.total || 0}`
+          if (baseline && latest !== baseline) {
+            window.location.reload()
+          } else {
+            baseline = latest
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          isChecking = false
+        })
+    }
+
+    if (refreshInterval >= 5000) {
+      window.setInterval(checkForProductUpdates, refreshInterval)
+    }
+  }
+
   console.log('Tosrifa Industries Ltd Products Gallery loaded successfully!')
 })
 

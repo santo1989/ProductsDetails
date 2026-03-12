@@ -101,11 +101,6 @@ $page_title = 'Login';
                         <p class="mb-0">Don't have an account? <a href="register.php">Register here</a></p>
                     </div>
 
-                    <div class="alert alert-info mt-3 small">
-                        <strong>Demo Credentials:</strong><br>
-                        Admin: <code>admin</code> / <code>admin123</code><br>
-                        User: <code>testuser</code> / <code>admin123</code>
-                    </div>
                 </div>
             </div>
         </div>

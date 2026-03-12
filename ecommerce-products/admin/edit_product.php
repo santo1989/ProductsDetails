@@ -70,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($upload_dir, 0755, true);
         }
 
-        $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
         $max_file_size = 5 * 1024 * 1024; // 5MB
 
         $image_paths = [
@@ -87,35 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES[$field];
 
-                // Validate file type
-                if (!in_array($file['type'], $allowed_types)) {
-                    $error = "Invalid file type for $field. Only JPG and PNG are allowed.";
+                $saved_path = save_uploaded_product_image($file, $upload_dir, $field, $max_file_size, $error);
+                if ($saved_path === false) {
                     break;
                 }
 
-                // Validate file size
-                if ($file['size'] > $max_file_size) {
-                    $error = "File size for $field exceeds 5MB limit.";
-                    break;
-                }
+                delete_image_and_thumbnail($image_paths[$field], '../');
 
-                // Delete old image if exists
-                if (!empty($image_paths[$field]) && file_exists('../' . $image_paths[$field])) {
-                    unlink('../' . $image_paths[$field]);
-                }
-
-                // Generate unique filename
-                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-                $filename = uniqid($field . '_') . '.' . $extension;
-                $filepath = $upload_dir . $filename;
-
-                // Move uploaded file
-                if (move_uploaded_file($file['tmp_name'], $filepath)) {
-                    $image_paths[$field] = 'uploads/' . $filename;
-                } else {
-                    $error = "Failed to upload $field.";
-                    break;
-                }
+                $image_paths[$field] = $saved_path;
             }
         }
 
@@ -290,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Product Images -->
                     <div class="col-md-12 mb-4 mt-3">
                         <h4 class="border-bottom pb-2"><i class="bi bi-images"></i> Product Images</h4>
-                        <p class="text-muted small">Upload new images to replace existing ones. Leave blank to keep current images.</p>
+                        <p class="text-muted small">Upload new images (JPG, PNG, WEBP) to replace existing ones. Leave blank to keep current images. New uploads are optimized to lighter files without changing dimensions.</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -298,10 +276,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (!empty($product['Main_Image'])): ?>
                             <div class="mb-2">
                                 <img src="<?php echo htmlspecialchars($product['Main_Image']); ?>"
-                                    alt="Current Main Image" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                    alt="Current Main Image" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="main_image" name="main_image" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="main_image" name="main_image" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -309,10 +287,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (!empty($product['Image1'])): ?>
                             <div class="mb-2">
                                 <img src="<?php echo htmlspecialchars($product['Image1']); ?>"
-                                    alt="Current Image 1" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                    alt="Current Image 1" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="image1" name="image1" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image1" name="image1" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -320,10 +298,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (!empty($product['Image2'])): ?>
                             <div class="mb-2">
                                 <img src="<?php echo htmlspecialchars($product['Image2']); ?>"
-                                    alt="Current Image 2" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                    alt="Current Image 2" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="image2" name="image2" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image2" name="image2" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -331,10 +309,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (!empty($product['Image3'])): ?>
                             <div class="mb-2">
                                 <img src="<?php echo htmlspecialchars($product['Image3']); ?>"
-                                    alt="Current Image 3" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                    alt="Current Image 3" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="image3" name="image3" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image3" name="image3" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -342,10 +320,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (!empty($product['Image4'])): ?>
                             <div class="mb-2">
                                 <img src="<?php echo htmlspecialchars($product['Image4']); ?>"
-                                    alt="Current Image 4" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
+                                    alt="Current Image 4" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/images/placeholder.svg';" style="max-width: 100px; height: auto;">
                             </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="image4" name="image4" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image4" name="image4" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
                 </div>
 

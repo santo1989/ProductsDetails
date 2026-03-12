@@ -11,6 +11,8 @@
                 <div class="col-md-3">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
+                        <li><a href="https://til.com.bd/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none">Tosrifa Industries Ltd</a></li>
+                        <li><a href="http://ntg.com.bd/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none">Northern Tosrifa Group (NTG)</a></li>
                         <li><a href="<?php echo isset($base_url) ? $base_url : ''; ?>index.php" class="text-white text-decoration-none">Products</a></li>
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <li><a href="<?php echo isset($base_url) ? $base_url : ''; ?>admin/dashboard.php" class="text-white text-decoration-none">Dashboard</a></li>
@@ -41,6 +43,10 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        window.APP_BASE_URL = <?php echo json_encode(isset($base_url) ? $base_url : ''); ?>;
+    </script>
 
     <!-- Custom JS -->
     <script src="<?php echo isset($base_url) ? $base_url : ''; ?>assets/js/script.js"></script>

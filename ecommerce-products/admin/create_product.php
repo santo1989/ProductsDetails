@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($upload_dir, 0755, true);
         }
 
-        $allowed_types = ['image/jpeg', 'image/jpg', 'image/png'];
         $max_file_size = 5 * 1024 * 1024; // 5MB
 
         $image_paths = [];
@@ -62,30 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES[$field];
 
-                // Validate file type
-                if (!in_array($file['type'], $allowed_types)) {
-                    $error = "Invalid file type for $field. Only JPG and PNG are allowed.";
+                $saved_path = save_uploaded_product_image($file, $upload_dir, $field, $max_file_size, $error);
+                if ($saved_path === false) {
                     break;
                 }
 
-                // Validate file size
-                if ($file['size'] > $max_file_size) {
-                    $error = "File size for $field exceeds 5MB limit.";
-                    break;
-                }
-
-                // Generate unique filename
-                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-                $filename = uniqid($field . '_') . '.' . $extension;
-                $filepath = $upload_dir . $filename;
-
-                // Move uploaded file
-                if (move_uploaded_file($file['tmp_name'], $filepath)) {
-                    $image_paths[$field] = 'uploads/' . $filename;
-                } else {
-                    $error = "Failed to upload $field.";
-                    break;
-                }
+                $image_paths[$field] = $saved_path;
             } else {
                 $image_paths[$field] = '';
             }
@@ -248,32 +229,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Product Images -->
                     <div class="col-md-12 mb-4 mt-3">
                         <h4 class="border-bottom pb-2"><i class="bi bi-images"></i> Product Images</h4>
-                        <p class="text-muted small">Allowed formats: JPG, PNG (Max 5MB per image)</p>
+                        <p class="text-muted small">Allowed formats: JPG, PNG, WEBP (Max 5MB per image). Uploaded images are optimized to lighter files without changing dimensions.</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="main_image" class="form-label">Main Image</label>
-                        <input type="file" class="form-control" id="main_image" name="main_image" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="main_image" name="main_image" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="image1" class="form-label">Additional Image 1</label>
-                        <input type="file" class="form-control" id="image1" name="image1" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image1" name="image1" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="image2" class="form-label">Additional Image 2</label>
-                        <input type="file" class="form-control" id="image2" name="image2" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image2" name="image2" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="image3" class="form-label">Additional Image 3</label>
-                        <input type="file" class="form-control" id="image3" name="image3" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image3" name="image3" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="image4" class="form-label">Additional Image 4</label>
-                        <input type="file" class="form-control" id="image4" name="image4" accept="image/jpeg,image/jpg,image/png">
+                        <input type="file" class="form-control" id="image4" name="image4" accept="image/jpeg,image/jpg,image/png,image/webp">
                     </div>
                 </div>
 

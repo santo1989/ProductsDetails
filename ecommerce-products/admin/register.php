@@ -14,11 +14,14 @@ $base_url = '../';
 // Handle registration form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = sanitize_input($_POST['username']);
+    $email = sanitize_input($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    if (empty($username) || empty($password) || empty($confirm_password)) {
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
         $error = 'Please fill in all fields.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please enter a valid email address.';
     } elseif (strlen($username) < 3) {
         $error = 'Username must be at least 3 characters long.';
     } elseif (strlen($password) < 6) {
@@ -27,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } else {
         // Check if username already exists
-        $stmt = $conn->prepare("SELECT ID FROM users WHERE Username = ?");
-        $stmt->bind_param("s", $username);
+        $stmt = $conn->prepare("SELECT ID FROM users WHERE Username = ? OR Email = ?");
+        $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $error = 'Username already exists. Please choose another.';
+            $error = 'Username or email already exists. Please choose another.';
             $stmt->close();
         } else {
             $stmt->close();
@@ -42,12 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $role = 'user'; // Default role
 
-            $stmt = $conn->prepare("INSERT INTO users (Username, Password, Role) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $hashed_password, $role);
+            $stmt = $conn->prepare("INSERT INTO users (Username, Email, Password, Role) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
 
             if ($stmt->execute()) {
                 $success = 'Registration successful! You can now login.';
                 $username = ''; // Clear form
+                $email = '';
             } else {
                 $error = 'Registration failed. Please try again.';
             }
@@ -93,6 +97,16 @@ $page_title = 'Register';
                                     required autofocus>
                             </div>
                             <div class="form-text">At least 3 characters</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>"
+                                    required>
+                            </div>
                         </div>
 
                         <div class="mb-3">

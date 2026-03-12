@@ -6,6 +6,7 @@ USE products_db;
 CREATE TABLE IF NOT EXISTS users (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
+    Email VARCHAR(191) DEFAULT NULL UNIQUE,
     Password VARCHAR(255) NOT NULL,
     Role ENUM('user', 'admin') DEFAULT 'user',
     Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -42,9 +43,9 @@ CREATE TABLE IF NOT EXISTS products (
 
 -- Insert Default Admin User
 -- Password: admin123 (hashed using password_hash with PASSWORD_DEFAULT)
-INSERT INTO users (Username, Password, Role) VALUES 
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-('testuser', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user');
+INSERT INTO users (Username, Email, Password, Role) VALUES 
+('admin', 'admin@til.local', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+('testuser', 'testuser@til.local', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user');
 
 -- Insert Sample Products
 INSERT INTO products (Product_Name, Category, Size, Description, Fabrication, Construction, GSM, Finishes, Color, Buyer, Style, Tags, Main_Image, Image1, Image2, Image3, Image4, Product_URL, Price, Tag, Created_By) VALUES

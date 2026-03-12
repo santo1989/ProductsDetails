@@ -35,9 +35,7 @@ $stmt->close();
 // Delete product images from server
 $images = [$product['Main_Image'], $product['Image1'], $product['Image2'], $product['Image3'], $product['Image4']];
 foreach ($images as $image) {
-    if (!empty($image) && file_exists('../' . $image)) {
-        unlink('../' . $image);
-    }
+    delete_image_and_thumbnail($image, '../');
 }
 
 // Delete product from database

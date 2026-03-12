@@ -22,6 +22,60 @@ main {
     flex: 1;
 }
 
+/* Animated Heading Circle Icon */
+.heading-circle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-size: 1.4rem;
+    vertical-align: middle;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: circlePulse 2.2s ease-in-out infinite;
+}
+
+.heading-circle-icon:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.08) rotate(8deg);
+    box-shadow: 0 0 0 6px rgba(7, 84, 50, 0.15);
+}
+
+.nav-circle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    animation: circlePulse 2.2s ease-in-out infinite;
+}
+
+.nav-link:hover .nav-circle-icon {
+    background-color: var(--primary-hover);
+    transform: scale(1.08);
+}
+
+@keyframes circlePulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+}
+
 /* Product Cards */
 .product-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -49,6 +103,25 @@ main {
     object-fit: contain;
     background-color: #f8f9fa;
     border-radius: 8px;
+}
+
+.main-image-container {
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.main-image-container .carousel-item {
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.main-image-container .main-product-image {
+    transition: transform 0.35s ease;
+    cursor: zoom-in;
+}
+
+.main-image-container:hover .carousel-item.active .main-product-image {
+    transform: scale(1.18);
 }
 
 .thumbnail-image {

@@ -7,15 +7,24 @@ $page_title = 'Products Gallery';
 // Fetch all products from database
 $sql = "SELECT * FROM products ORDER BY Created_At DESC";
 $result = $conn->query($sql);
+
+$autoRefreshMeta = ['last_update' => 0, 'total' => 0, 'scope' => 'all'];
+$metaResult = $conn->query("SELECT COALESCE(UNIX_TIMESTAMP(MAX(COALESCE(Updated_At, Created_At))), 0) AS last_update, COUNT(*) AS total FROM products");
+if ($metaResult && $metaRow = $metaResult->fetch_assoc()) {
+    $autoRefreshMeta['last_update'] = (int) ($metaRow['last_update'] ?? 0);
+    $autoRefreshMeta['total'] = (int) ($metaRow['total'] ?? 0);
+    $metaResult->free();
+}
 ?>
 
 <?php include 'includes/header.php'; ?>
 
 <div class="container my-5">
+    <div data-product-autorefresh="1" data-interval="20" data-scope="<?php echo htmlspecialchars($autoRefreshMeta['scope']); ?>" data-last-update="<?php echo (int) $autoRefreshMeta['last_update']; ?>" data-total="<?php echo (int) $autoRefreshMeta['total']; ?>"></div>
     <div class="row mb-4">
         <div class="col">
             <h1 class="display-4">
-                <i class="bi bi-grid-3x3-gap"></i> Products Gallery
+                <i class="bi bi-grid-3x3-gap heading-circle-icon"></i> Products Gallery
             </h1>
             <p class="lead">Browse our complete collection of quality garment products</p>
         </div>
@@ -27,10 +36,12 @@ $result = $conn->query($sql);
                 <div class="col">
                     <div class="card h-100 shadow-sm product-card">
                         <?php
-                        $main_image = !empty($product['Main_Image']) ? $product['Main_Image'] : 'assets/images/placeholder.svg';
+                        $main_image = !empty($product['Main_Image']) ? get_optimized_image_for_display($product['Main_Image']) : 'assets/images/placeholder.svg';
                         ?>
                         <img src="<?php echo htmlspecialchars($main_image); ?>"
                             class="card-img-top"
+                            loading="lazy"
+                            decoding="async"
                             alt="<?php echo htmlspecialchars($product['Product_Name']); ?>"
                             onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
                             style="height: 250px; object-fit: cover;">

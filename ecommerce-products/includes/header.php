@@ -35,13 +35,18 @@ if (session_status() === PHP_SESSION_NONE) {
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo isset($base_url) ? $base_url : ''; ?>index.php">
-                            <i class="bi bi-grid"></i> Products
+                            <i class="bi bi-grid nav-circle-icon"></i> Products
                         </a>
                     </li>
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo isset($base_url) ? $base_url : ''; ?>admin/dashboard.php">
                                 <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo isset($base_url) ? $base_url : ''; ?>admin/profile.php">
+                                <i class="bi bi-person-gear"></i> My Profile
                             </a>
                         </li>
                         <li class="nav-item">

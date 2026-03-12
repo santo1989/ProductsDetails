@@ -65,6 +65,9 @@ $stmt->close();
                                 <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
                                     <img src="<?php echo htmlspecialchars($image); ?>"
                                         class="d-block w-100 main-product-image"
+                                        loading="<?php echo $index === 0 ? 'eager' : 'lazy'; ?>"
+                                        decoding="async"
+                                        fetchpriority="<?php echo $index === 0 ? 'high' : 'low'; ?>"
                                         onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
                                         alt="<?php echo htmlspecialchars($product['Product_Name']); ?>">
                                 </div>
@@ -93,6 +96,8 @@ $stmt->close();
                                     <img src="<?php echo htmlspecialchars($image); ?>"
                                         class="img-thumbnail thumbnail-image <?php echo $index === 0 ? 'active' : ''; ?>"
                                         alt="Thumbnail <?php echo $index + 1; ?>"
+                                        loading="lazy"
+                                        decoding="async"
                                         onerror="this.onerror=null;this.src='assets/images/placeholder.svg';"
                                         data-bs-target="#productCarousel"
                                         data-bs-slide-to="<?php echo $index; ?>"
